@@ -8,7 +8,13 @@ def parse_input(filepath: str) -> str:
   return content
 
 class Solution:
-  
+
+  def calculate_prio_value(self, c: str) -> int:
+    if c.islower():
+      return ord(c) - 96
+    else:
+      return ord(c) - 38
+
   def solve_p1(self, input: str) -> int:
     total = 0
     for backpack in input.splitlines():
@@ -22,10 +28,18 @@ class Solution:
           overlap.add(backpack[i])
 
       for c in overlap:
-        if c.islower():
-          total += ord(c) - 96
-        else:
-          total += ord(c) - 38
+        total += self.calculate_prio_value(c)
+    return total
+  
+  def solve_p2(self, input: str) -> int:
+    total = 0
+    backpacks = input.splitlines()
+    backpacks = list(filter(lambda x: len(x.strip()) > 0, backpacks))
+    while len(backpacks) > 2:
+      a,b,c = backpacks.pop(0), backpacks.pop(0), backpacks.pop(0)
+      overlap = set(a).intersection(set(b)).intersection(set(c))
+      for c in overlap:
+        total += self.calculate_prio_value(c)
     return total
 
 
@@ -42,3 +56,6 @@ if __name__ == "__main__":
 
     assert solution.solve_p1(test) == 157
     print(solution.solve_p1(content))
+
+    assert solution.solve_p2(test) == 70
+    print(solution.solve_p2(content))
