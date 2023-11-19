@@ -73,5 +73,6 @@ if __name__ == "__main__":
     assert solution.solve_p1(test) == 2
     print(solution.solve_p1(content))
 
-    print(solution.solve_p2(content))
     assert solution.solve_p2(test) == 4
+    print(solution.solve_p2(content))
+    
