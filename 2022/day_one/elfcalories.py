@@ -48,6 +48,6 @@ class Solution:
 if __name__ == "__main__":
     content = parse_input('aoc_input.txt')
     solution = Solution(content)
-    print(solution.solve_p1())
+    #print(solution.solve_p1())
     print(solution.solve_p2())
     
