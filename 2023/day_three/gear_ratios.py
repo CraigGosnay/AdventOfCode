@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass
 
 
@@ -77,7 +78,22 @@ class Solution:
           gears.append(Gear(curr_row, curr_col, 0))
         curr_col += 1
       curr_row += 1
-    print(gears)
+
+    gmap = defaultdict(GridNum)
+    for num in nums:
+      for i in range(num.col_start, num.col_end + 1):
+        gmap[(num.row, i)] = num
+    
+    for gear in gears:
+      gearnums = []
+      for dir in DIRS:
+        if (gear.row + dir[0], gear.col + dir[1]) in gmap:
+          if gmap[(gear.row + dir[0], gear.col + dir[1])] not in gearnums:
+            gearnums.append(gmap[(gear.row + dir[0], gear.col + dir[1])])
+      if len(gearnums) == 2:
+        gear.ratio = gearnums[0].val * gearnums[1].val
+        ratios.append(gear.ratio)
+
     return sum(ratios)
 
 if __name__ == "__main__":
@@ -88,6 +104,7 @@ if __name__ == "__main__":
     print('question 1: ', solution.solve_p1(content))
     assert solution.solve_p1(content) == 521515
 
-    print('question 2: ', solution.solve_p2(example))
-    assert solution.solve_p2(example) == 0
+    print('question 2: ', solution.solve_p2(content))
+    assert solution.solve_p2(example) == 467835
+    assert solution.solve_p2(content) == 69527306
     
