@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+
+
 def parse_input(filepath: str) -> str:
 
   with open(filepath) as f:
@@ -6,6 +9,19 @@ def parse_input(filepath: str) -> str:
   return content
 
 DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, -1)]
+
+@dataclass
+class GridNum:
+  row: int
+  col_start: int
+  col_end: int
+  val: int
+
+@dataclass
+class Gear:
+  row: int
+  col: int
+  ratio: int
 
 class Solution:
   
@@ -38,6 +54,31 @@ class Solution:
       curr_row += 1
 
     return sum(included)
+    
+  def solve_p2(self, input: str) -> int:
+    rows = input.splitlines()
+    line_len = len(rows[0])
+    nums = []
+    gears = []
+    ratios = []
+
+    curr_row = 0
+    while curr_row < len(rows):
+      curr_col = 0
+      curr_num = []
+
+      while curr_col < line_len:
+        if rows[curr_row][curr_col].isdigit():
+          curr_num.append(rows[curr_row][curr_col])
+        if (not rows[curr_row][curr_col].isdigit() or curr_col == line_len - 1) and len(curr_num) > 0:
+            nums.append(GridNum(curr_row, curr_col-len(curr_num), curr_col-1, int(''.join(curr_num))))
+            curr_num = []
+        if rows[curr_row][curr_col] == '*':
+          gears.append(Gear(curr_row, curr_col, 0))
+        curr_col += 1
+      curr_row += 1
+    print(gears)
+    return sum(ratios)
 
 if __name__ == "__main__":
     example = parse_input('./aoc_input_ex.txt')
@@ -46,3 +87,7 @@ if __name__ == "__main__":
     assert solution.solve_p1(example) == 4361
     print('question 1: ', solution.solve_p1(content))
     assert solution.solve_p1(content) == 521515
+
+    print('question 2: ', solution.solve_p2(example))
+    assert solution.solve_p2(example) == 0
+    
